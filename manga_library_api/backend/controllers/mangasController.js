@@ -15,12 +15,6 @@ const id = parseInt(req.params.id);
 
 function store(req, res){
 const body = req.body;
-    if(!body.title || !body.author){
-        return res.status(400).json({
-            error: `I campi "Titolo" e "Autore" sono obbligatori`
-        })
-        
-    }
     const newMangaId = mangas[mangas.length - 1].id + 1
     const newManga = {
         id: newMangaId,
@@ -43,12 +37,6 @@ const id = parseInt(req.params.id)
             error: "Manga non trovato"
         })
     }
-    if (!body.title || !body.author){
-        return res.status(400).json({
-            error: `I campi "Titolo" e "Autore" sono obbligatori` 
-        })
-    }
-
     const updatedManga = {
         id,
         ...body

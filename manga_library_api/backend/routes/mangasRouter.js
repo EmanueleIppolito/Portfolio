@@ -1,22 +1,22 @@
 const express = require("express")
 const router = express.Router();
-const mangas = require("../data/mangas.json");
 const mangasController = require("../controllers/mangasController.js")
-
+const checkId = require("../middlewares/checkId.js")
+const validateManga = require("../middlewares/validateManga.js")
 
 
 
 router.get("/", mangasController.index);
 
-router.get("/:id", mangasController.show)
+router.get("/:id", checkId, mangasController.show)
 
-router.post("/", mangasController.store)
+router.post("/", validateManga, mangasController.store)
 
-router.delete("/:id", mangasController.destroy)
+router.delete("/:id", checkId, mangasController.destroy)
 
-router.put("/:id", mangasController.update)
+router.put("/:id", checkId, validateManga, mangasController.update)
 
-router.patch("/:id", mangasController.modify)
+router.patch("/:id", checkId, mangasController.modify)
 
 
 
