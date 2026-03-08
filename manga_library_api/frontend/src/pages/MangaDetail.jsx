@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom"
 import Header from "../components/Header.jsx"
 import Footer from "../components/Footer.jsx"
 import { API_BASE_URL } from "../config/api.js"
+import AddMangaModal from "../components/AddMangaModal.jsx"
 import formatDate from "../utils/formatDate.js"
 
 function MangaDetail() {
@@ -10,6 +11,7 @@ function MangaDetail() {
     const [manga, setManga] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
+    const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
         const fetchManga = async () => {
@@ -39,53 +41,59 @@ function MangaDetail() {
             : ""
 
     return (
-        <>
-            <div className="page-wrapper">
-                <Header
-                    search=""
-                    setSearch={() => { }}
-                    filters={{ isOnGoing: false, isFinished: false }}
-                    setFilters={() => { }}
-                    onOpenModal={() => { }}
-                />
+        <div className="page-wrapper">
+            <Header
+                search=""
+                setSearch={() => { }}
+                filters={{ isOnGoing: false, isFinished: false }}
+                setFilters={() => { }}
+                onOpenModal={() => setShowModal(true)}
+            />
 
-                <main className="detail-page">
-                    <Link to="/" className="back-link">← Torna alla home</Link>
+            <AddMangaModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+                onMangaAdded={() => { }}
+            />
 
-                    {loading && <p>Caricamento...</p>}
-                    {error && <p>{error}</p>}
+            <main className="detail-page">
+                <Link to="/" className="back-link">← Torna alla home</Link>
 
-                    {manga && (
-                        <div className="detail-card">
-                            <img className="detail-cover" src={coverSrc} alt={manga.title} />
+                {loading && <p>Caricamento...</p>}
+                {error && <p>{error}</p>}
 
-                            <div className="detail-info">
-                                <h1>{manga.title}</h1>
-                                <p><strong>Titolo originale:</strong> {manga.originalTitle}</p>
-                                <p><strong>Autore:</strong> {manga.author}</p>
-                                <p><strong>Editore:</strong> {manga.publisher}</p>
-                                <p><strong>Volumi:</strong> {manga.volumes}</p>
-                                <p><strong>Data pubblicazione:</strong> {formatDate(manga.publishDate)}</p>
-                                <p><strong>Stato:</strong> {manga.isOnGoing ? "In corso" : "Concluso"}</p>
+                {manga && (
+                    <div className="detail-card">
+                        <img className="detail-cover" src={coverSrc} alt={manga.title} />
 
-                                {manga.genre?.length > 0 && (
-                                    <p><strong>Generi:</strong> {manga.genre.join(", ")}</p>
-                                )}
+                        <div className="detail-info">
+                            <h1>{manga.title}</h1>
+                            <p><strong>Titolo originale:</strong> {manga.originalTitle}</p>
+                            <p><strong>Autore:</strong> {manga.author}</p>
+                            <p><strong>Editore:</strong> {manga.publisher}</p>
+                            <p><strong>Volumi:</strong> {manga.volumes}</p>
+                            <p><strong>Data pubblicazione:</strong> {formatDate(manga.publishDate)}</p>
+                            <p><strong>Stato:</strong> {manga.isOnGoing ? "In corso" : "Concluso"}</p>
 
-                                {manga.tag?.length > 0 && (
-                                    <p><strong>Tag:</strong> {manga.tag.join(", ")}</p>
-                                )}
-                                <div className="space-20"></div>
-                                <h2>Trama</h2>
-                                <p>{manga.plot}</p>
-                            </div>
+                            {manga.genre?.length > 0 && (
+                                <p><strong>Generi:</strong> {manga.genre.join(", ")}</p>
+                            )}
+
+                            {manga.tag?.length > 0 && (
+                                <p><strong>Tag:</strong> {manga.tag.join(", ")}</p>
+                            )}
+
+                            <div className="space-20"></div>
+
+                            <h2>Trama</h2>
+                            <p>{manga.plot}</p>
                         </div>
-                    )}
-                </main>
+                    </div>
+                )}
+            </main>
 
-                <Footer />
-            </div>
-        </>
+            <Footer />
+        </div>
     )
 }
 
