@@ -3,6 +3,7 @@ const router = express.Router();
 const mangasController = require("../controllers/mangasController.js")
 const checkId = require("../middlewares/checkId.js")
 const validateManga = require("../middlewares/validateManga.js")
+const upload = require("../config/multer.js")
 
 
 
@@ -10,7 +11,7 @@ router.get("/", mangasController.index);
 
 router.get("/:id", checkId, mangasController.show)
 
-router.post("/", validateManga, mangasController.store)
+router.post("/", upload.single("cover"), validateManga, mangasController.store)
 
 router.delete("/:id", checkId, mangasController.destroy)
 

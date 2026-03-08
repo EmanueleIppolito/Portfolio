@@ -184,6 +184,8 @@ async function store(req, res, next) {
             tag = []
         } = req.body;
 
+        const coverPath = req.file ? `/covers/${req.file.filename}` : cover;
+
         const mangaSql = `
             INSERT INTO mangas
             (title, original_title, author, cover, is_on_going, plot, volumes, publish_date, publisher)
@@ -194,7 +196,7 @@ async function store(req, res, next) {
             title,
             originalTitle,
             author,
-            cover,
+            coverPath,
             isOnGoing,
             plot,
             volumes,
@@ -259,7 +261,7 @@ async function store(req, res, next) {
             originalTitle,
             author,
             genre,
-            cover,
+            cover: coverPath,
             isOnGoing,
             plot,
             volumes,
@@ -408,7 +410,7 @@ async function update(req, res, next) {
     }
 }
 
-    async function modify(req, res, next) {
+async function modify(req, res, next) {
     try {
         const id = parseInt(req.params.id);
         const body = req.body;
