@@ -184,6 +184,20 @@ async function store(req, res, next) {
             tag = []
         } = req.body;
 
+        const normalizedIsOnGoing =
+            isOnGoing === true ||
+            isOnGoing === "true" ||
+            isOnGoing === 1 ||
+            isOnGoing === "1"
+                ? 1
+                : 0;
+
+        const normalizedGenre = Array.isArray(genre) ? genre : [genre];
+        const normalizedTag = Array.isArray(tag) ? tag : [tag];
+
+        const cleanGenre = normalizedGenre.filter(singleGenre => singleGenre && singleGenre.trim() !== "");
+        const cleanTag = normalizedTag.filter(singleTag => singleTag && singleTag.trim() !== "");
+
         const coverPath = req.file ? `/covers/${req.file.filename}` : cover;
 
         const mangaSql = `
@@ -197,7 +211,7 @@ async function store(req, res, next) {
             originalTitle,
             author,
             coverPath,
-            isOnGoing,
+            normalizedIsOnGoing,
             plot,
             volumes,
             publishDate,
@@ -207,7 +221,7 @@ async function store(req, res, next) {
         const [mangaResult] = await pool.query(mangaSql, mangaValues);
         const mangaId = mangaResult.insertId;
 
-        for (const singleGenre of genre) {
+        for (const singleGenre of cleanGenre) {
             const [existingGenres] = await pool.query(
                 `SELECT id FROM genres WHERE name = ?`,
                 [singleGenre]
@@ -231,7 +245,7 @@ async function store(req, res, next) {
             );
         }
 
-        for (const singleTag of tag) {
+        for (const singleTag of cleanTag) {
             const [existingTags] = await pool.query(
                 `SELECT id FROM tags WHERE name = ?`,
                 [singleTag]
@@ -260,14 +274,14 @@ async function store(req, res, next) {
             title,
             originalTitle,
             author,
-            genre,
+            genre: cleanGenre,
             cover: coverPath,
-            isOnGoing,
+            isOnGoing: Boolean(normalizedIsOnGoing),
             plot,
             volumes,
             publishDate,
             publisher,
-            tag
+            tag: cleanTag
         };
 
         res.status(201).json({
