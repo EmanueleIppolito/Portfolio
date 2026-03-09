@@ -142,6 +142,7 @@ function AddMangaModal({ showModal, setShowModal, onMangaAdded }) {
             placeholder="Titolo"
             value={formData.title}
             onChange={(e) => handleFormField("title", e.target.value)}
+            required
           />
 
           <input
@@ -156,6 +157,7 @@ function AddMangaModal({ showModal, setShowModal, onMangaAdded }) {
             placeholder="Autore"
             value={formData.author}
             onChange={(e) => handleFormField("author", e.target.value)}
+            required
           />
 
           <input
