@@ -7,43 +7,43 @@ import useMangas from "../hooks/useMangas.js"
 import filterMangas from "../utils/filterMangas.js"
 
 function HomePage() {
-    const { mangas, addManga } = useMangas()
+	const { mangas, addManga } = useMangas()
 
-    const [search, setSearch] = useState("")
-    const [filters, setFilters] = useState({
-        isOnGoing: false,
-        isFinished: false
-    })
-    const [showModal, setShowModal] = useState(false)
+	const [search, setSearch] = useState("")
+	const [filters, setFilters] = useState({
+		isOnGoing: false,
+		isFinished: false
+	})
+	const [showModal, setShowModal] = useState(false)
 
-    const filteredMangas = filterMangas(mangas, search, filters)
+	const filteredMangas = filterMangas(mangas, search, filters)
 
-    return (
-        <>
-            <div className="page-wrapper">
-                <Header
-                    search={search}
-                    setSearch={setSearch}
-                    filters={filters}
-                    setFilters={setFilters}
-                    onOpenModal={() => setShowModal(true)}
-                />
+	return (
+		<>
+			<div className="page-wrapper">
+				<Header
+					search={search}
+					setSearch={setSearch}
+					filters={filters}
+					setFilters={setFilters}
+					onOpenModal={() => setShowModal(true)}
+				/>
 
-                <AddMangaModal
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                    onMangaAdded={addManga}
-                />
+				<AddMangaModal
+					showModal={showModal}
+					setShowModal={setShowModal}
+					onMangaAdded={addManga}
+				/>
 
-                <h1>MangAPI</h1>
-                <p>Manga presenti: {filteredMangas.length}</p>
+				<h1>MangAPI</h1>
+				<p>Manga presenti: {filteredMangas.length}</p>
 
-                <MangaList mangas={filteredMangas} />
+				<MangaList mangas={filteredMangas} />
 
-                <Footer />
-            </div>
-        </>
-    )
+				<Footer />
+			</div>
+		</>
+	)
 }
 
 export default HomePage
